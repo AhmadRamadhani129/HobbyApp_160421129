@@ -57,6 +57,8 @@ class HomeDetailFragment : Fragment() {
                 picasso.build().load(it.image).into(binding.imgViewDetail)
 
             }
+
+            //Multi Page
             val news = it.news
             val size = news?.size ?: 0
             var index = 0

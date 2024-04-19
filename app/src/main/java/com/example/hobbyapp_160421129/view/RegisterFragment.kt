@@ -39,6 +39,7 @@ class RegisterFragment : Fragment() {
             var photo = binding.textInputLayoutPhoto.editText?.text.toString()
 
 
+            //Check if password and retype password is same
             if(password == rePass)
             {
                 viewModel = ViewModelProvider(this).get(UserViewModel::class.java)

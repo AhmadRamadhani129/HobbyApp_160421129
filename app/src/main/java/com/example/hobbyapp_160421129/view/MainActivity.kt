@@ -2,6 +2,7 @@ package com.example.hobbyapp_160421129.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.view.isInvisible
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.hobbyapp_160421129.R
@@ -23,6 +24,16 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupActionBarWithNavController(this, navController, binding.drawerLayout)
         binding.bottomNav.setupWithNavController(navController)
         NavigationUI.setupWithNavController(binding.navView, navController)
+
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.loginFragment -> binding.bottomNav.isInvisible = true
+                R.id.registerFragment -> binding.bottomNav.isInvisible = true
+                R.id.itemHome -> binding.bottomNav.isInvisible = false
+                else -> binding.bottomNav.isInvisible = false // Show bottom navigation for other fragments
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

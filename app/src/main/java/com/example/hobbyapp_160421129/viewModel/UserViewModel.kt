@@ -17,6 +17,7 @@ class UserViewModel(application: Application):AndroidViewModel(application) {
     var userLoginLD = MutableLiveData<Users>()
     val userRegistLD = MutableLiveData<Boolean>()
     val userUpdateLD = MutableLiveData<Boolean>()
+    val checkLoginLD = MutableLiveData<Boolean>()
     val TAG = "volleyTag"
     private var queue:RequestQueue ?= null
 
@@ -63,14 +64,25 @@ class UserViewModel(application: Application):AndroidViewModel(application) {
         val stringRequest = object : StringRequest(
             Method.POST, url,
             {response->
-                userLoginLD.value = Gson().fromJson(response, Users::class.java)
+                try {
+                    val userLogin = Gson().fromJson(response, Users::class.java)
 
-                Log.d("Login", "Result: ${response}")
+                    if(userLogin == null || userLogin.id.isNullOrEmpty()){
+                        checkLoginLD.value = false
+                    }else{
+                        userLoginLD.value = userLogin
+                        checkLoginLD.value = true
+                    }
+                }catch (e: Exception){
+                    checkLoginLD.value = false
+                    Log.e("Login Success", "Error parsing response: $response", e)
+                }
+
             },
-            {
-                Log.d("Login", it.toString())
+            {error ->
+                checkLoginLD.value = false
+                Log.e("Login", "Volley error: ${error.message}", error)
             }
-
         )
         {
             override fun getParams(): MutableMap<String, String>? {

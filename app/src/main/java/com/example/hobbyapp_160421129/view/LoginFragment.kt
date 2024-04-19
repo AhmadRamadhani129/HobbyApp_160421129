@@ -14,6 +14,7 @@ import androidx.navigation.Navigation
 import com.example.hobbyapp_160421129.R
 import com.example.hobbyapp_160421129.databinding.FragmentLoginBinding
 import com.example.hobbyapp_160421129.viewModel.UserViewModel
+import android.widget.Toast
 
 class LoginFragment : Fragment() {
     private lateinit var viewModel: UserViewModel
@@ -39,30 +40,52 @@ class LoginFragment : Fragment() {
             var username = binding.txtInputUsername.editText?.text.toString()
             var password = binding.textInputLayoutPassword.editText?.text.toString()
 
-            viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-            viewModel.fetchLogin(username, password)
+            if (username.isNotEmpty() && password.isNotEmpty()) {
+                viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+                viewModel.fetchLogin(username, password)
 
-            val saveLogin = requireActivity().getSharedPreferences("loginAccount", Context.MODE_PRIVATE)
-            var editor = saveLogin.edit()
+                viewModel.checkLoginLD.observe(viewLifecycleOwner, Observer {success->
+                    if(success) {
+                        val saveLogin = requireActivity().getSharedPreferences("loginAccount", Context.MODE_PRIVATE)
+                        var editor = saveLogin.edit()
+                        viewModel.userLoginLD.value?.let { userLogin->
+                            editor.putString("id", userLogin.id)
+                            editor.putString("firstName", userLogin.first_name)
+                            editor.putString("lastName", userLogin.last_name)
+                            editor.putString("email", userLogin.email)
+                            editor.putString("username", userLogin.username)
+                            editor.putString("password", userLogin.password)
+                            editor.putString("photo", userLogin.photo)
+                            editor.apply()
+                        }
+                        val action = LoginFragmentDirections.actionHomeFragment()
+                        Navigation.findNavController(view).navigate(action)
+                    }else{
+                        Toast.makeText(requireContext(), "Login Failed", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }else{
+                Toast.makeText(requireContext(), "Please enter correct username and password", Toast.LENGTH_SHORT).show()
+            }
 
-            viewModel.userLoginLD.observe(viewLifecycleOwner, Observer {
-                var userLogin = it
 
-                if(userLogin != null)
-                {
-                    editor.putString("id", userLogin.id)
-                    editor.putString("firstName", userLogin.first_name)
-                    editor.putString("lastName", userLogin.last_name)
-                    editor.putString("email", userLogin.email)
-                    editor.putString("username", userLogin.username)
-                    editor.putString("password", userLogin.password)
-                    editor.putString("photo", userLogin.photo)
-                    editor.apply()
-
-                    val action = LoginFragmentDirections.actionHomeFragment()
-                    Navigation.findNavController(view).navigate(action)
-                }
-            })
+//            viewModel.userLoginLD.observe(viewLifecycleOwner, Observer {
+//                var userLogin = it
+//
+//                if(userLogin != null)
+//                {
+//                    editor.putString("id", userLogin.id)
+//                    editor.putString("firstName", userLogin.first_name)
+//                    editor.putString("lastName", userLogin.last_name)
+//                    editor.putString("email", userLogin.email)
+//                    editor.putString("username", userLogin.username)
+//                    editor.putString("password", userLogin.password)
+//                    editor.putString("photo", userLogin.photo)
+//                    editor.apply()
+//
+//
+//                }
+//            })
 
         }
     }
