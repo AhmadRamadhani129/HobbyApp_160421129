@@ -44,7 +44,11 @@
         android:id="@+id/itemProfile"
         android:name="com.example.hobbyapp_160421129.view.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/actionProfileLoginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homeDetailFragment"
         android:name="com.example.hobbyapp_160421129.view.HomeDetailFragment"

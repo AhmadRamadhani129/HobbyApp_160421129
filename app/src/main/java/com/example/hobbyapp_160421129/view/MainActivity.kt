@@ -3,6 +3,7 @@ package com.example.hobbyapp_160421129.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.view.isInvisible
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.hobbyapp_160421129.R
@@ -21,22 +22,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         navController = (supportFragmentManager.findFragmentById(R.id.navHost) as NavHostFragment).navController
-        NavigationUI.setupActionBarWithNavController(this, navController, binding.drawerLayout)
+        NavigationUI.setupActionBarWithNavController(this, navController)
         binding.bottomNav.setupWithNavController(navController)
-        NavigationUI.setupWithNavController(binding.navView, navController)
 
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.loginFragment -> binding.bottomNav.isInvisible = true
-                R.id.registerFragment -> binding.bottomNav.isInvisible = true
-                R.id.itemHome -> binding.bottomNav.isInvisible = false
-                else -> binding.bottomNav.isInvisible = false // Show bottom navigation for other fragments
+                R.id.loginFragment, R.id.registerFragment -> {
+                    binding.bottomNav.isInvisible = true
+                }
+                else->{
+                    binding.bottomNav.isInvisible = false
+                }
             }
         }
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return NavigationUI.navigateUp(navController, binding.drawerLayout) || super.onSupportNavigateUp()
-    }
 }

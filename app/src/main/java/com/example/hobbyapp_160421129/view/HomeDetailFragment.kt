@@ -42,7 +42,6 @@ class HomeDetailFragment : Fragment() {
 
             observeViewModel()
         }
-
     }
 
     fun observeViewModel(){
@@ -85,9 +84,6 @@ class HomeDetailFragment : Fragment() {
                     }
                 }
             }
-
         })
     }
-
-
 }

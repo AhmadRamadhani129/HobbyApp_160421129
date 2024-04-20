@@ -34,8 +34,8 @@ class HomeListAdapter (val homeList: ArrayList<News>)
         holder.binding.btnRead.setOnClickListener {
             val action = HomeListFragmentDirections.actionHomeDetailFragment(homeList[position].id.toString())
             Navigation.findNavController(it).navigate(action)
-
         }
+
         val picasso = Picasso.Builder(holder.itemView.context)
         picasso.listener { picasso, uri, exception -> exception.printStackTrace() }
         picasso.build().load(homeList[position].image).into(holder.binding.imgView, object :Callback{

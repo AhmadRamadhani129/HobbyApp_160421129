@@ -68,31 +68,6 @@ class LoginFragment : Fragment() {
                 Toast.makeText(requireContext(), "Please enter correct username and password", Toast.LENGTH_SHORT).show()
             }
 
-
-//            viewModel.userLoginLD.observe(viewLifecycleOwner, Observer {
-//                var userLogin = it
-//
-//                if(userLogin != null)
-//                {
-//                    editor.putString("id", userLogin.id)
-//                    editor.putString("firstName", userLogin.first_name)
-//                    editor.putString("lastName", userLogin.last_name)
-//                    editor.putString("email", userLogin.email)
-//                    editor.putString("username", userLogin.username)
-//                    editor.putString("password", userLogin.password)
-//                    editor.putString("photo", userLogin.photo)
-//                    editor.apply()
-//
-//
-//                }
-//            })
-
         }
     }
-
-
-
-
-
-
 }

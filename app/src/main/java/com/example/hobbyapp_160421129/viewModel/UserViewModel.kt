@@ -22,8 +22,6 @@ class UserViewModel(application: Application):AndroidViewModel(application) {
     private var queue:RequestQueue ?= null
 
     fun fetchRegister(firstName: String, lastName: String, email: String, username: String, password: String, photo: String){
-//        userLoadErrorLD.value = false
-//        userLoadLD.value = true
 
         queue = Volley.newRequestQueue(getApplication())
         val url = "http://10.0.2.2/hobbyApp/register.php"
@@ -38,7 +36,6 @@ class UserViewModel(application: Application):AndroidViewModel(application) {
                 userRegistLD.value = false
                 Log.d("Register", it.toString())
             }
-
         )
         {
             override fun getParams(): MutableMap<String, String>? {
@@ -77,7 +74,6 @@ class UserViewModel(application: Application):AndroidViewModel(application) {
                     checkLoginLD.value = false
                     Log.e("Login Success", "Error parsing response: $response", e)
                 }
-
             },
             {error ->
                 checkLoginLD.value = false

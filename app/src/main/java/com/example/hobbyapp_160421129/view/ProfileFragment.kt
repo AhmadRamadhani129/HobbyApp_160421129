@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import com.example.hobbyapp_160421129.R
 import com.example.hobbyapp_160421129.databinding.FragmentProfileBinding
 import com.example.hobbyapp_160421129.viewModel.UserViewModel
@@ -61,15 +62,11 @@ class ProfileFragment : Fragment() {
             }
         }
 
-
-        //        binding.btnLogout.setOnClickListener {
-//            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-//            sharedPreferences.edit().putBoolean("login", false).apply()
-//            val logOut = sharedPreferences.edit()
-//            logOut.remove("id")
-//            logOut.apply()
-//        }
-
+        binding.btnLogout.setOnClickListener {
+            userAccount.edit().clear().apply()
+            val action = ProfileFragmentDirections.actionProfileLoginFragment()
+            Navigation.findNavController(view).navigate(action)
+        }
 
     }
 }
