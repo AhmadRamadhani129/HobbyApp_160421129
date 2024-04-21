@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_navigation"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/itemHome">
 
     <fragment
         android:id="@+id/itemHome"
@@ -16,12 +16,15 @@
         <action
             android:id="@+id/actionProfileFragment"
             app:destination="@id/itemProfile" />
+        <action
+            android:id="@+id/actionHomeLoginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.hobbyapp_160421129.view.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" >
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/actionRegisterFragment"
             app:destination="@id/registerFragment" />

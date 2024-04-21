@@ -15,10 +15,17 @@ import com.example.hobbyapp_160421129.R
 import com.example.hobbyapp_160421129.databinding.FragmentLoginBinding
 import com.example.hobbyapp_160421129.viewModel.UserViewModel
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.navigation.NavigationView
 
 class LoginFragment : Fragment() {
     private lateinit var viewModel: UserViewModel
     private lateinit var binding: FragmentLoginBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(false)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +41,9 @@ class LoginFragment : Fragment() {
             val action = LoginFragmentDirections.actionRegisterFragment()
             Navigation.findNavController(it).navigate(action)
         }
+
+        (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        setHasOptionsMenu(true)
 
         binding.btnLogin.setOnClickListener {
 

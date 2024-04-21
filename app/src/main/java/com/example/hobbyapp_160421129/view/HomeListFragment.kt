@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hobbyapp_160421129.R
 import com.example.hobbyapp_160421129.databinding.FragmentHomeListBinding
 import com.example.hobbyapp_160421129.viewModel.HomeViewModel
+import com.google.android.material.color.DynamicColors.OnAppliedCallback
 
 /**
  * A simple [Fragment] subclass.
@@ -33,6 +36,13 @@ class HomeListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.itemHome)
+            }
+        })
+
         viewModel =ViewModelProvider(this).get(HomeViewModel::class.java)
         viewModel.refresh()
 

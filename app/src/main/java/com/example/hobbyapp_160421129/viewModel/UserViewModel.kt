@@ -120,6 +120,10 @@ class UserViewModel(application: Application):AndroidViewModel(application) {
         queue?.add(stringRequest)
     }
 
+    fun isUserLoggedIn(): Boolean {
+        return userLoginLD.value != null && !userLoginLD.value?.id.isNullOrEmpty()
+    }
+
     override fun onCleared() {
         super.onCleared()
         queue?.cancelAll(TAG)

@@ -6,12 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import com.example.hobbyapp_160421129.R
 import com.example.hobbyapp_160421129.databinding.FragmentRegisterBinding
 import com.example.hobbyapp_160421129.viewModel.UserViewModel
+import com.google.android.material.navigation.NavigationView
 import kotlin.math.log
 
 class RegisterFragment : Fragment() {
@@ -29,6 +31,7 @@ class RegisterFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as AppCompatActivity).findViewById<NavigationView>(R.id.navView).visibility = View.GONE
         binding.btnOk.setOnClickListener {
             var firstName = binding.textInputLayoutFirst.editText?.text.toString()
             var lastName = binding.textInputLayoutLast.editText?.text.toString()

@@ -8,10 +8,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.example.hobbyapp_160421129.R
 import com.example.hobbyapp_160421129.databinding.FragmentProfileBinding
 import com.example.hobbyapp_160421129.viewModel.UserViewModel
@@ -37,6 +40,13 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.itemHome)
+            }
+        })
+
         viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
         val userAccount = requireActivity().getSharedPreferences("loginAccount", Context.MODE_PRIVATE)
