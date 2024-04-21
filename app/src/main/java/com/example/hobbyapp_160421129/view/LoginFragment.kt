@@ -60,6 +60,7 @@ class LoginFragment : Fragment() {
                         }
                         val action = LoginFragmentDirections.actionHomeFragment()
                         Navigation.findNavController(view).navigate(action)
+                        Toast.makeText(requireContext(), "Login Success", Toast.LENGTH_SHORT).show()
                     }else{
                         Toast.makeText(requireContext(), "Login Failed", Toast.LENGTH_SHORT).show()
                     }
