@@ -15,7 +15,9 @@ import com.example.hobbyapp_160421129.R
 import com.example.hobbyapp_160421129.databinding.FragmentLoginBinding
 import com.example.hobbyapp_160421129.viewModel.UserViewModel
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.navigation.NavigationView
 
 class LoginFragment : Fragment() {
@@ -37,6 +39,13 @@ class LoginFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.loginFragment)
+            }
+        })
+
         binding.btnRegister.setOnClickListener {
             val action = LoginFragmentDirections.actionRegisterFragment()
             Navigation.findNavController(it).navigate(action)
