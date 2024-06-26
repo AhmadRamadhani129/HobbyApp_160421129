@@ -10,122 +10,145 @@ import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.hobbyapp_160421129.model.Users
+import com.example.hobbyapp_160421129.util.buildDb
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
-class UserViewModel(application: Application):AndroidViewModel(application) {
+class UserViewModel(application: Application):AndroidViewModel(application), CoroutineScope {
     var userLoginLD = MutableLiveData<Users>()
     val userRegistLD = MutableLiveData<Boolean>()
     val userUpdateLD = MutableLiveData<Boolean>()
     val checkLoginLD = MutableLiveData<Boolean>()
-    val TAG = "volleyTag"
-    private var queue:RequestQueue ?= null
+    private val job = Job()
+//    val TAG = "volleyTag"
+//    private var queue:RequestQueue ?= null
 
-    fun fetchRegister(firstName: String, lastName: String, email: String, username: String, password: String, photo: String){
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.IO
 
-        queue = Volley.newRequestQueue(getApplication())
-        val url = "http://10.0.2.2/hobbyApp/register.php"
-
-        val stringRequest = object : StringRequest(
-            Method.POST, url,
-            {response->
-                userRegistLD.value = true
-                Log.d("Register", "Result: ${response}")
-            },
-            {
-                userRegistLD.value = false
-                Log.d("Register", it.toString())
-            }
-        )
-        {
-            override fun getParams(): MutableMap<String, String>? {
-                val params = HashMap<String, String>()
-                params["firstName"] = firstName
-                params["lastName"] = lastName
-                params["email"] = email
-                params["username"] = username
-                params["password"] = password
-                params["photo"] = photo
-                return params
-            }
+    fun fetchRegister(users: Users){
+        launch {
+            val db = buildDb(getApplication())
+            db.hobbyDao().insertAllUser(users)
+            userRegistLD.postValue(true)
         }
-        stringRequest.tag = TAG
-        queue?.add(stringRequest)
+//        queue = Volley.newRequestQueue(getApplication())
+//        val url = "http://10.0.2.2/hobbyApp/register.php"
+//
+//        val stringRequest = object : StringRequest(
+//            Method.POST, url,
+//            {response->
+//                userRegistLD.value = true
+//                Log.d("Register", "Result: ${response}")
+//            },
+//            {
+//                userRegistLD.value = false
+//                Log.d("Register", it.toString())
+//            }
+//        )
+//        {
+//            override fun getParams(): MutableMap<String, String>? {
+//                val params = HashMap<String, String>()
+//                params["firstName"] = firstName
+//                params["lastName"] = lastName
+//                params["email"] = email
+//                params["username"] = username
+//                params["password"] = password
+//                params["photo"] = photo
+//                return params
+//            }
+//        }
+//        stringRequest.tag = TAG
+//        queue?.add(stringRequest)
     }
 
     fun fetchLogin(username: String, password: String){
-
-        queue = Volley.newRequestQueue(getApplication())
-        val url = "http://10.0.2.2/hobbyApp/login.php"
-
-        val stringRequest = object : StringRequest(
-            Method.POST, url,
-            {response->
-                try {
-                    val userLogin = Gson().fromJson(response, Users::class.java)
-
-                    if(userLogin == null || userLogin.id.isNullOrEmpty()){
-                        checkLoginLD.value = false
-                    }else{
-                        userLoginLD.value = userLogin
-                        checkLoginLD.value = true
-                    }
-                }catch (e: Exception){
-                    checkLoginLD.value = false
-                    Log.e("Login Success", "Error parsing response: $response", e)
-                }
-            },
-            {error ->
-                checkLoginLD.value = false
-                Log.e("Login", "Volley error: ${error.message}", error)
-            }
-        )
-        {
-            override fun getParams(): MutableMap<String, String>? {
-                val params = HashMap<String, String>()
-                params["username"] = username
-                params["password"] = password
-                return params
-            }
+        launch {
+            val db = buildDb(getApplication())
+            userLoginLD.postValue(db.hobbyDao().loginUser(username, password))
+            checkLoginLD.postValue(true)
         }
-        stringRequest.tag = TAG
-        queue?.add(stringRequest)
+//        queue = Volley.newRequestQueue(getApplication())
+//        val url = "http://10.0.2.2/hobbyApp/login.php"
+//
+//        val stringRequest = object : StringRequest(
+//            Method.POST, url,
+//            {response->
+//                try {
+//                    val userLogin = Gson().fromJson(response, Users::class.java)
+//
+//                    if(userLogin == null || userLogin.id.isNullOrEmpty()){
+//                        checkLoginLD.value = false
+//                    }else{
+//                        userLoginLD.value = userLogin
+//                        checkLoginLD.value = true
+//                    }
+//                }catch (e: Exception){
+//                    checkLoginLD.value = false
+//                    Log.e("Login Success", "Error parsing response: $response", e)
+//                }
+//            },
+//            {error ->
+//                checkLoginLD.value = false
+//                Log.e("Login", "Volley error: ${error.message}", error)
+//            }
+//        )
+//        {
+//            override fun getParams(): MutableMap<String, String>? {
+//                val params = HashMap<String, String>()
+//                params["username"] = username
+//                params["password"] = password
+//                return params
+//            }
+//        }
+//        stringRequest.tag = TAG
+//        queue?.add(stringRequest)
     }
 
-    fun fetchUpdate(id:String, firstName: String, lastName: String, password: String){
-        queue = Volley.newRequestQueue(getApplication())
-        val url = "http://10.0.2.2/hobbyApp/updateUser.php"
-
-        val stringRequest = object : StringRequest(
-            Method.POST, url,{response->
-                userUpdateLD.value = true
-                Log.d("Update", "Result: ${response}")
-            },
-            {
-                userUpdateLD.value = false
-                Log.d("Update", it.toString())
-            }
-        )
-        {
-            override fun getParams(): MutableMap<String, String>? {
-                val params = HashMap<String, String>()
-                params["id"] = id
-                params["firstName"] = firstName
-                params["lastName"] = lastName
-                params["password"] = password
-                return params
-            }
+    fun fetchUpdate(users: Users){
+        launch {
+            val db = buildDb(getApplication())
+            db.hobbyDao().updateUser(users)
+            userUpdateLD.postValue(true)
         }
-        stringRequest.tag = TAG
-        queue?.add(stringRequest)
+//        queue = Volley.newRequestQueue(getApplication())
+//        val url = "http://10.0.2.2/hobbyApp/updateUser.php"
+//
+//        val stringRequest = object : StringRequest(
+//            Method.POST, url,{response->
+//                userUpdateLD.value = true
+//                Log.d("Update", "Result: ${response}")
+//            },
+//            {
+//                userUpdateLD.value = false
+//                Log.d("Update", it.toString())
+//            }
+//        )
+//        {
+//            override fun getParams(): MutableMap<String, String>? {
+//                val params = HashMap<String, String>()
+//                params["id"] = id
+//                params["firstName"] = firstName
+//                params["lastName"] = lastName
+//                params["password"] = password
+//                return params
+//            }
+//        }
+//        stringRequest.tag = TAG
+//        queue?.add(stringRequest)
     }
 
     fun isUserLoggedIn(): Boolean {
-        return userLoginLD.value != null && !userLoginLD.value?.id.isNullOrEmpty()
+        return userLoginLD.value != null && !userLoginLD.value?.uuid.toString().isNullOrEmpty()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        queue?.cancelAll(TAG)
-    }
+//    override fun onCleared() {
+//        super.onCleared()
+//        queue?.cancelAll(TAG)
+//    }
 }

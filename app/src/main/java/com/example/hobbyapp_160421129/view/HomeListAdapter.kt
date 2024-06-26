@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso
 import java.lang.Exception
 
 class HomeListAdapter (val homeList: ArrayList<News>)
-    :RecyclerView.Adapter<HomeListAdapter.HomeViewHolder>() {
+    :RecyclerView.Adapter<HomeListAdapter.HomeViewHolder>(), ButtonActionNavClickListener {
 
     class HomeViewHolder(var binding: HomeListItemBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -27,14 +27,16 @@ class HomeListAdapter (val homeList: ArrayList<News>)
     }
 
     override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
-        holder.binding.txtTitle.text =homeList[position].title
-        holder.binding.txtUsername.text = homeList[position].author
-        holder.binding.txtDesc.text = homeList[position].desc
+        holder.binding.news = homeList[position]
+        holder.binding.navListener = this
+//        holder.binding.txtTitle.text =homeList[position].title
+//        holder.binding.txtUsername.text = homeList[position].author
+//        holder.binding.txtDesc.text = homeList[position].desc
 
-        holder.binding.btnRead.setOnClickListener {
-            val action = HomeListFragmentDirections.actionHomeDetailFragment(homeList[position].id.toString())
-            Navigation.findNavController(it).navigate(action)
-        }
+//        holder.binding.btnRead.setOnClickListener {
+//            val action = HomeListFragmentDirections.actionHomeDetailFragment(homeList[position].uuid.toString())
+//            Navigation.findNavController(it).navigate(action)
+//        }
 
         val picasso = Picasso.Builder(holder.itemView.context)
         picasso.listener { picasso, uri, exception -> exception.printStackTrace() }
@@ -51,10 +53,16 @@ class HomeListAdapter (val homeList: ArrayList<News>)
         })
     }
 
-    fun updateHomeList(newHomeList: ArrayList<News>){
+    fun updateHomeList(newHomeList: List<News>){
         homeList.clear()
         homeList.addAll(newHomeList)
         notifyDataSetChanged()
+    }
+
+    override fun onButtonActionNavClick(v: View) {
+        val id = v.tag.toString()
+        val action = HomeListFragmentDirections.actionHomeDetailFragment(id)
+        Navigation.findNavController(v).navigate(action)
     }
 
 

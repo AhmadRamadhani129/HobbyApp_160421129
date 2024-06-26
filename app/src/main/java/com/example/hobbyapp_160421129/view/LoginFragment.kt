@@ -20,7 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.navigation.NavigationView
 
-class LoginFragment : Fragment() {
+class LoginFragment : Fragment(), ButtonClickListener, ButtonActionNavClickListener {
     private lateinit var viewModel: UserViewModel
     private lateinit var binding: FragmentLoginBinding
 
@@ -40,54 +40,93 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        binding.listener = this
+        binding.navListener = this
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
                 findNavController().navigate(R.id.loginFragment)
             }
         })
 
-        binding.btnRegister.setOnClickListener {
-            val action = LoginFragmentDirections.actionRegisterFragment()
-            Navigation.findNavController(it).navigate(action)
-        }
+//        binding.btnRegister.setOnClickListener {
+//            val action = LoginFragmentDirections.actionRegisterFragment()
+//            Navigation.findNavController(it).navigate(action)
+//        }
 
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         setHasOptionsMenu(true)
 
-        binding.btnLogin.setOnClickListener {
+        viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
-            var username = binding.txtInputUsername.editText?.text.toString()
-            var password = binding.textInputLayoutPassword.editText?.text.toString()
+//        binding.btnLogin.setOnClickListener {
+//
+//            var username = binding.txtInputUsername.editText?.text.toString()
+//            var password = binding.textInputLayoutPassword.editText?.text.toString()
+//
+//            if (username.isNotEmpty() && password.isNotEmpty()) {
+//                viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+//                viewModel.fetchLogin(username, password)
+//
+//                viewModel.checkLoginLD.observe(viewLifecycleOwner, Observer {success->
+//                    if(success) {
+//                        val saveLogin = requireActivity().getSharedPreferences("loginAccount", Context.MODE_PRIVATE)
+//                        var editor = saveLogin.edit()
+//                        viewModel.userLoginLD.value?.let { userLogin->
+//                            editor.putString("id", userLogin.id)
+//                            editor.putString("firstName", userLogin.first_name)
+//                            editor.putString("lastName", userLogin.last_name)
+//                            editor.putString("email", userLogin.email)
+//                            editor.putString("username", userLogin.username)
+//                            editor.putString("password", userLogin.password)
+//                            editor.putString("photo", userLogin.photo)
+//                            editor.apply()
+//                        }
+//                        val action = LoginFragmentDirections.actionHomeFragment()
+//                        Navigation.findNavController(view).navigate(action)
+//                        Toast.makeText(requireContext(), "Login Success", Toast.LENGTH_SHORT).show()
+//                    }else{
+//                        Toast.makeText(requireContext(), "Login Failed", Toast.LENGTH_SHORT).show()
+//                    }
+//                })
+//            }else{
+//                Toast.makeText(requireContext(), "Please enter correct username and password", Toast.LENGTH_SHORT).show()
+//            }
+//
+//        }
+    }
 
-            if (username.isNotEmpty() && password.isNotEmpty()) {
-                viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-                viewModel.fetchLogin(username, password)
+    override fun onButtonClick(v: View) {
+        if (binding.user!!.username.isNotEmpty() && binding.user!!.password.isNotEmpty()) {
+            viewModel.fetchLogin(binding.user!!.username, binding.user!!.password)
 
-                viewModel.checkLoginLD.observe(viewLifecycleOwner, Observer {success->
-                    if(success) {
-                        val saveLogin = requireActivity().getSharedPreferences("loginAccount", Context.MODE_PRIVATE)
-                        var editor = saveLogin.edit()
-                        viewModel.userLoginLD.value?.let { userLogin->
-                            editor.putString("id", userLogin.id)
-                            editor.putString("firstName", userLogin.first_name)
-                            editor.putString("lastName", userLogin.last_name)
-                            editor.putString("email", userLogin.email)
-                            editor.putString("username", userLogin.username)
-                            editor.putString("password", userLogin.password)
-                            editor.putString("photo", userLogin.photo)
-                            editor.apply()
-                        }
-                        val action = LoginFragmentDirections.actionHomeFragment()
-                        Navigation.findNavController(view).navigate(action)
-                        Toast.makeText(requireContext(), "Login Success", Toast.LENGTH_SHORT).show()
-                    }else{
-                        Toast.makeText(requireContext(), "Login Failed", Toast.LENGTH_SHORT).show()
+            viewModel.checkLoginLD.observe(viewLifecycleOwner, Observer {success->
+                if(success) {
+                    val saveLogin = requireActivity().getSharedPreferences("loginAccount", Context.MODE_PRIVATE)
+                    var editor = saveLogin.edit()
+                    viewModel.userLoginLD.value?.let { userLogin->
+                        editor.putString("id", userLogin.uuid.toString())
+                        editor.putString("firstName", userLogin.first_name)
+                        editor.putString("lastName", userLogin.last_name)
+                        editor.putString("email", userLogin.email)
+                        editor.putString("username", userLogin.username)
+                        editor.putString("password", userLogin.password)
+                        editor.putString("photo", userLogin.photo)
+                        editor.apply()
                     }
-                })
-            }else{
-                Toast.makeText(requireContext(), "Please enter correct username and password", Toast.LENGTH_SHORT).show()
-            }
-
+                    val action = LoginFragmentDirections.actionHomeFragment()
+                    Navigation.findNavController(v).navigate(action)
+                    Toast.makeText(requireContext(), "Login Success", Toast.LENGTH_SHORT).show()
+                }else{
+                    Toast.makeText(requireContext(), "Login Failed", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
     }
+
+    override fun onButtonActionNavClick(v: View) {
+        val action = LoginFragmentDirections.actionRegisterFragment()
+        Navigation.findNavController(v).navigate(action)
+    }
+
 }

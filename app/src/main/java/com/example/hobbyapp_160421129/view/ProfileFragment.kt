@@ -20,14 +20,10 @@ import com.example.hobbyapp_160421129.databinding.FragmentProfileBinding
 import com.example.hobbyapp_160421129.viewModel.UserViewModel
 import com.squareup.picasso.Picasso
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), ButtonActionNavClickListener, ButtonClickListener {
     private lateinit var viewModel: UserViewModel
     private lateinit var binding: FragmentProfileBinding
+    val userAccount = requireActivity().getSharedPreferences("loginAccount", Context.MODE_PRIVATE)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,10 +34,10 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.listener = this
+        binding.navListener = this
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
@@ -50,37 +46,63 @@ class ProfileFragment : Fragment() {
         })
 
         viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        viewModel.userLoginLD.observe(viewLifecycleOwner, Observer {
+            binding.user = it
+        })
 
-        val userAccount = requireActivity().getSharedPreferences("loginAccount", Context.MODE_PRIVATE)
-        val id = userAccount.getString("id", "")
-        val firstName = userAccount.getString("firstName", "")
-        val lastName = userAccount.getString("lastName", "")
+//        val userAccount = requireActivity().getSharedPreferences("loginAccount", Context.MODE_PRIVATE)
+//        val id = userAccount.getString("id", "")
+//        val firstName = userAccount.getString("firstName", "")
+//        val lastName = userAccount.getString("lastName", "")
+//        val oldPassword = userAccount.getString("password", "")
+//        val photo = userAccount.getString("photo", "")
+
+        Picasso.get().load(binding.user!!.photo).into(binding.imgProfile)
+//        binding.textInputLayoutFirstName.editText?.setText(firstName)
+//        binding.textInputLayoutLastName.editText?.setText(lastName)
+
+//        binding.btnUpdate.setOnClickListener {
+//            if(oldPassword == binding.textInputLayoutOldPass.editText?.text.toString()){
+//                viewModel.fetchUpdate(id.toString(), binding.textInputLayoutFirstName.editText?.text.toString(), binding.textInputLayoutLastName.editText?.text.toString(), binding.textInputLayoutNewPass.editText?.text.toString())
+//                viewModel.userUpdateLD.observe(viewLifecycleOwner, Observer {
+//                    if(it == true)
+//                    {
+//                        binding.textInputLayoutOldPass.editText?.setText("")
+//                        binding.textInputLayoutNewPass.editText?.setText("")
+//                        Toast.makeText(requireContext(), "Update Success", Toast.LENGTH_SHORT).show()
+//                    }
+//                })
+//            }
+//        }
+
+//        binding.btnLogout.setOnClickListener {
+//            userAccount.edit().clear().apply()
+//            val action = ProfileFragmentDirections.actionProfileLoginFragment()
+//            Navigation.findNavController(view).navigate(action)
+//        }
+
+    }
+
+    override fun onButtonClick(v: View) {
         val oldPassword = userAccount.getString("password", "")
-        val photo = userAccount.getString("photo", "")
 
-        Picasso.get().load(photo).into(binding.imgProfile)
-        binding.textInputLayoutFirstName.editText?.setText(firstName)
-        binding.textInputLayoutLastName.editText?.setText(lastName)
-
-        binding.btnUpdate.setOnClickListener {
-            if(oldPassword == binding.textInputLayoutOldPass.editText?.text.toString()){
-                viewModel.fetchUpdate(id.toString(), binding.textInputLayoutFirstName.editText?.text.toString(), binding.textInputLayoutLastName.editText?.text.toString(), binding.textInputLayoutNewPass.editText?.text.toString())
-                viewModel.userUpdateLD.observe(viewLifecycleOwner, Observer {
-                    if(it == true)
-                    {
-                        binding.textInputLayoutOldPass.editText?.setText("")
-                        binding.textInputLayoutNewPass.editText?.setText("")
-                        Toast.makeText(requireContext(), "Update Success", Toast.LENGTH_SHORT).show()
-                    }
-                })
-            }
+        if(oldPassword == binding.textInputLayoutOldPass.editText?.text.toString()){
+            viewModel.fetchUpdate(binding.user!!)
+//            viewModel.fetchUpdate(id.toString(), binding.textInputLayoutFirstName.editText?.text.toString(), binding.textInputLayoutLastName.editText?.text.toString(), binding.textInputLayoutNewPass.editText?.text.toString())
+            viewModel.userUpdateLD.observe(viewLifecycleOwner, Observer {
+                if(it == true)
+                {
+                    binding.textInputLayoutOldPass.editText?.setText("")
+                    binding.textInputLayoutNewPass.editText?.setText("")
+                    Toast.makeText(requireContext(), "Update Success", Toast.LENGTH_SHORT).show()
+                }
+            })
         }
+    }
 
-        binding.btnLogout.setOnClickListener {
-            userAccount.edit().clear().apply()
-            val action = ProfileFragmentDirections.actionProfileLoginFragment()
-            Navigation.findNavController(view).navigate(action)
-        }
-
+    override fun onButtonActionNavClick(v: View) {
+        userAccount.edit().clear().apply()
+        val action = ProfileFragmentDirections.actionProfileLoginFragment()
+        Navigation.findNavController(v).navigate(action)
     }
 }
