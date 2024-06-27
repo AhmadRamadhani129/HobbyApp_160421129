@@ -38,6 +38,9 @@ interface HobbyDao {
     @Update
     fun updateUser(users: Users)
 
+    @Query("UPDATE users SET first_name=:firstName, last_name=:lastName, password=:password WHERE uuid=:id")
+    fun updateUser(firstName:String, lastName:String, password: String, id: Int)
+
     @Delete
     fun deleteUser(users: Users)
 }

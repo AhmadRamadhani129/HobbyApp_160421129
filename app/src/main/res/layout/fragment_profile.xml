@@ -32,57 +32,65 @@
                     android:id="@+id/imgProfile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
                     android:src="@drawable/ic_launcher_foreground"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.046" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayoutFirstName"
-                    android:layout_width="409dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="70dp"
+                    android:layout_marginEnd="24dp"
                     android:hint="First Name"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imgProfile">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@{user.first_name}"/>
+                        android:text="@{user.first_name}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayoutLastName"
-                    android:layout_width="409dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="30dp"
+                    android:layout_marginEnd="24dp"
                     android:hint="Last name"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true"
-                    app:layout_constraintStart_toStartOf="@+id/textInputLayoutFirstName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textInputLayoutFirstName">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@{user.last_name}"/>
+                        android:text="@{user.last_name}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayoutOldPass"
-                    android:layout_width="409dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="30dp"
+                    android:layout_marginEnd="24dp"
                     android:hint="Old Password"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true"
-                    app:layout_constraintStart_toStartOf="@+id/textInputLayoutLastName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textInputLayoutLastName">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -95,10 +103,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="48dp"
-                    android:layout_marginEnd="28dp"
-                    android:text="Logout"
+                    android:backgroundTint="@android:color/holo_red_dark"
                     android:onClick="@{navListener::onButtonActionNavClick}"
+                    android:text="Logout"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/btnUpdate" />
 
                 <Button
@@ -106,22 +115,25 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:layout_marginEnd="164dp"
-                    android:text="Update"
                     android:onClick="@{listener::onButtonClick}"
                     android:tag="@{user.uuid}"
+                    android:text="Update"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textInputLayoutNewPass" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayoutNewPass"
-                    android:layout_width="409dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="30dp"
+                    android:layout_marginEnd="24dp"
                     android:hint="New Password"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true"
-                    app:layout_constraintStart_toStartOf="@+id/textInputLayoutOldPass"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textInputLayoutOldPass">
 
                     <com.google.android.material.textfield.TextInputEditText

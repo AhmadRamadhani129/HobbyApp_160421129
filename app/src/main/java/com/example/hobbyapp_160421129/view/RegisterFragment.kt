@@ -43,6 +43,8 @@ class RegisterFragment : Fragment(), ButtonClickListener {
 
         viewModel = ViewModelProvider(this).get(UserViewModel::class.java)
 
+
+
 //        binding.btnOk.setOnClickListener {
 //            var firstName = binding.textInputLayoutFirst.editText?.text.toString()
 //            var lastName = binding.textInputLayoutLast.editText?.text.toString()
@@ -71,9 +73,19 @@ class RegisterFragment : Fragment(), ButtonClickListener {
     }
 
     override fun onButtonClick(v: View) {
-        var rePass = binding.textInputLayoutRePass.editText?.text.toString()
 
-        if (binding.user!!.password == rePass) {
+        var firstName = binding.textInputLayoutFirst.editText?.text.toString()
+        var lastName = binding.textInputLayoutLast.editText?.text.toString()
+        var email = binding.textInputLayoutEmail.editText?.text.toString()
+        var username = binding.textInputLayoutUsername.editText?.text.toString()
+        var password = binding.textInputLayoutPass.editText?.text.toString()
+        var rePass = binding.textInputLayoutRePass.editText?.text.toString()
+        var photo = binding.textInputLayoutPhoto.editText?.text.toString()
+
+//        Log.d("Check", binding.user!!.password)
+
+        if (password == rePass) {
+            binding.user = Users(firstName, lastName, email, username, password, photo)
             viewModel.fetchRegister(binding.user!!)
             Toast.makeText(v.context, "News Added", Toast.LENGTH_SHORT).show()
 

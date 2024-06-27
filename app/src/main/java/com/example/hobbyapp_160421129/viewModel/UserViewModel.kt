@@ -69,9 +69,21 @@ class UserViewModel(application: Application):AndroidViewModel(application), Cor
 
     fun fetchLogin(username: String, password: String){
         launch {
-            val db = buildDb(getApplication())
-            userLoginLD.postValue(db.hobbyDao().loginUser(username, password))
-            checkLoginLD.postValue(true)
+            try {
+                val db = buildDb(getApplication())
+                var userLogin = db.hobbyDao().loginUser(username, password)
+                if (userLogin == null || userLogin.uuid.toString().isNullOrEmpty()) {
+                    checkLoginLD.postValue(false)
+                }
+                else {
+                    userLoginLD.postValue(userLogin)
+                    checkLoginLD.postValue(true)
+                }
+            }
+            catch (e:Exception) {
+                checkLoginLD.postValue(false)
+                Log.e("checkerror", e.toString())
+            }
         }
 //        queue = Volley.newRequestQueue(getApplication())
 //        val url = "http://10.0.2.2/hobbyApp/login.php"
@@ -110,10 +122,10 @@ class UserViewModel(application: Application):AndroidViewModel(application), Cor
 //        queue?.add(stringRequest)
     }
 
-    fun fetchUpdate(users: Users){
+    fun fetchUpdate(firstName:String, lastName:String, password:String, id:Int){
         launch {
             val db = buildDb(getApplication())
-            db.hobbyDao().updateUser(users)
+            db.hobbyDao().updateUser(firstName, lastName, password, id)
             userUpdateLD.postValue(true)
         }
 //        queue = Volley.newRequestQueue(getApplication())

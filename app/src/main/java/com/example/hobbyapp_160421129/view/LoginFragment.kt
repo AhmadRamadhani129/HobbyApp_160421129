@@ -97,8 +97,12 @@ class LoginFragment : Fragment(), ButtonClickListener, ButtonActionNavClickListe
     }
 
     override fun onButtonClick(v: View) {
-        if (binding.user!!.username.isNotEmpty() && binding.user!!.password.isNotEmpty()) {
-            viewModel.fetchLogin(binding.user!!.username, binding.user!!.password)
+
+        var username = binding.txtInputUsername.editText?.text.toString()
+        var password = binding.textInputLayoutPassword.editText?.text.toString()
+
+        if (username.isNotEmpty() && password.isNotEmpty()) {
+            viewModel.fetchLogin(username, password)
 
             viewModel.checkLoginLD.observe(viewLifecycleOwner, Observer {success->
                 if(success) {
