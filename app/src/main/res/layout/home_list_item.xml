@@ -38,6 +38,7 @@
                     android:layout_width="0dp"
                     android:layout_height="350dp"
                     android:scaleType="centerCrop"
+                    android:imagesUrl="@{news.image}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="parent"

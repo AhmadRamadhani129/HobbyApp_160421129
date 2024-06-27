@@ -53,9 +53,9 @@ class HomeDetailFragment : Fragment() {
                 binding.news = it
 //                binding.txtTitleDetail.setText(it.title)
 //                binding.txtAuthorDetail.setText("@${it.author}")
-                val picasso = Picasso.Builder(binding.root.context)
-                picasso.listener { picasso, uri, exception -> exception.printStackTrace() }
-                picasso.build().load(binding.news!!.image).into(binding.imgViewDetail)
+//                val picasso = Picasso.Builder(binding.root.context)
+//                picasso.listener { picasso, uri, exception -> exception.printStackTrace() }
+//                picasso.build().load(binding.news!!.image).into(binding.imgViewDetail)
 
             }
 

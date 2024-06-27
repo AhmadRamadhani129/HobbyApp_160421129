@@ -63,7 +63,7 @@ class ProfileFragment : Fragment(), ButtonActionNavClickListener, ButtonClickLis
 
         binding.user = Users(firstName.toString(), lastName.toString(), email.toString(), username.toString(), oldPassword.toString(), photo.toString())
 
-        Picasso.get().load(photo).into(binding.imgProfile)
+//        Picasso.get().load(photo).into(binding.imgProfile)
 //        binding.textInputLayoutFirstName.editText?.setText(firstName)
 //        binding.textInputLayoutLastName.editText?.setText(lastName)
 
