@@ -19,7 +19,7 @@ import com.example.hobbyapp_160421129.viewModel.UserViewModel
 import com.google.android.material.navigation.NavigationView
 import kotlin.math.log
 
-class RegisterFragment : Fragment(), ButtonClickListener {
+class RegisterFragment : Fragment(), ButtonClickListener, TextInputClickListener {
     private lateinit var viewModel: UserViewModel
     private lateinit var binding: FragmentRegisterBinding
 
@@ -35,6 +35,7 @@ class RegisterFragment : Fragment(), ButtonClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         binding.listener = this
+        binding.inputListener = this
 
         super.onViewCreated(view, savedInstanceState)
         (activity as AppCompatActivity).findViewById<NavigationView>(R.id.navView).visibility = View.GONE
@@ -83,14 +84,73 @@ class RegisterFragment : Fragment(), ButtonClickListener {
         var photo = binding.textInputLayoutPhoto.editText?.text.toString()
 
 //        Log.d("Check", binding.user!!.password)
+        if(firstName.isNotEmpty() && lastName.isNotEmpty() && email.isNotEmpty() && username.isNotEmpty() && password.isNotEmpty() && rePass.isNotEmpty() && photo.isNotEmpty()){
 
-        if (password == rePass) {
-            binding.user = Users(firstName, lastName, email, username, password, photo)
-            viewModel.fetchRegister(binding.user!!)
-            Toast.makeText(v.context, "News Added", Toast.LENGTH_SHORT).show()
+            if (password == rePass) {
+                binding.user = Users(firstName, lastName, email, username, password, photo)
+                viewModel.fetchRegister(binding.user!!)
+                Toast.makeText(v.context, "Registration successful!", Toast.LENGTH_SHORT).show()
 
-            val action = RegisterFragmentDirections.actionLoginFragment()
-            Navigation.findNavController(v).navigate(action)
+                val action = RegisterFragmentDirections.actionLoginFragment()
+                Navigation.findNavController(v).navigate(action)
+            } else {
+                binding.textInputLayoutPass.error = "Password does not match."
+                binding.textInputLayoutRePass.error = "Password does not match."
+
+            }
+        } else{
+            if(firstName.isEmpty()){
+                binding.textInputLayoutFirst.error = "First Name are required fields."
+            }
+            if(lastName.isEmpty()){
+                binding.textInputLayoutLast.error = "Last Name are required fields."
+            }
+            if(email.isEmpty()){
+                binding.textInputLayoutEmail.error = "Email are required fields."
+            }
+            if(username.isEmpty()){
+                binding.textInputLayoutUsername.error = "Username are required fields."
+            }
+            if(password.isEmpty()){
+                binding.textInputLayoutPass.error = "Password are required fields."
+            }
+            if(rePass.isEmpty()){
+                binding.textInputLayoutRePass.error = "Retype Password are required fields."
+            }
+            if(photo.isEmpty()){
+                binding.textInputLayoutPhoto.error = "Photo are required fields."
+            }
+        }
+    }
+
+    override fun onInputClick(v: View) {
+        if(v.tag == "inputUsername"){
+            binding.textInputLayoutUsername.error = null
+            binding.textInputLayoutUsername.isErrorEnabled = false
+        }
+        if(v.tag == "inputPassword"){
+            binding.textInputLayoutPass.error = null
+            binding.textInputLayoutPass.isErrorEnabled = false
+        }
+        if(v.tag == "txtFirst"){
+            binding.textInputLayoutFirst.error = null
+            binding.textInputLayoutFirst.isErrorEnabled = false
+        }
+        if(v.tag == "inputLName"){
+            binding.textInputLayoutLast.error = null
+            binding.textInputLayoutLast.isErrorEnabled = false
+        }
+        if(v.tag == "inputEmail"){
+            binding.textInputLayoutEmail.error = null
+            binding.textInputLayoutEmail.isErrorEnabled = false
+        }
+        if(v.tag == "inputPhoto"){
+            binding.textInputLayoutPhoto.error = null
+            binding.textInputLayoutPhoto.isErrorEnabled = false
+        }
+        if(v.tag == "inputRetypePassword"){
+            binding.textInputLayoutRePass.error = null
+            binding.textInputLayoutRePass.isErrorEnabled = false
         }
     }
 

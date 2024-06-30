@@ -13,6 +13,9 @@
         <variable
             name="navListener"
             type="com.example.hobbyapp_160421129.view.ButtonActionNavClickListener" />
+        <variable
+            name="inputListener"
+            type="com.example.hobbyapp_160421129.view.TextInputClickListener" />
     </data>
 
     <FrameLayout
@@ -48,6 +51,7 @@
                     android:layout_marginTop="70dp"
                     android:layout_marginEnd="24dp"
                     android:hint="First Name"
+                    app:errorEnabled="true"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -57,6 +61,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:onClick="@{inputListener::onInputClick}"
+                        android:tag="inputFName"
                         android:text="@{user.first_name}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,6 +74,7 @@
                     android:layout_marginTop="30dp"
                     android:layout_marginEnd="24dp"
                     android:hint="Last name"
+                    app:errorEnabled="true"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -77,6 +84,8 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:onClick="@{inputListener::onInputClick}"
+                        android:tag="inputLName"
                         android:text="@{user.last_name}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -88,6 +97,7 @@
                     android:layout_marginTop="30dp"
                     android:layout_marginEnd="24dp"
                     android:hint="Old Password"
+                    app:errorEnabled="true"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -96,7 +106,9 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:onClick="@{inputListener::onInputClick}"
+                        android:tag="inputOldPass"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
@@ -131,6 +143,7 @@
                     android:layout_marginTop="30dp"
                     android:layout_marginEnd="24dp"
                     android:hint="New Password"
+                    app:errorEnabled="true"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -139,7 +152,9 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:onClick="@{inputListener::onInputClick}"
+                        android:tag="inputNewPass"/>
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>

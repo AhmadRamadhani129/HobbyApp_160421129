@@ -16,11 +16,15 @@ import com.example.hobbyapp_160421129.databinding.FragmentLoginBinding
 import com.example.hobbyapp_160421129.viewModel.UserViewModel
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
+import androidx.transition.Visibility
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.textfield.TextInputLayout
 
-class LoginFragment : Fragment(), ButtonClickListener, ButtonActionNavClickListener {
+class LoginFragment : Fragment(), ButtonClickListener, ButtonActionNavClickListener, TextInputClickListener {
     private lateinit var viewModel: UserViewModel
     private lateinit var binding: FragmentLoginBinding
 
@@ -42,6 +46,7 @@ class LoginFragment : Fragment(), ButtonClickListener, ButtonActionNavClickListe
 
         binding.listener = this
         binding.navListener = this
+        binding.inputListener = this
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
@@ -125,12 +130,37 @@ class LoginFragment : Fragment(), ButtonClickListener, ButtonActionNavClickListe
                     Toast.makeText(requireContext(), "Login Failed", Toast.LENGTH_SHORT).show()
                 }
             })
+        } else {
+            if(username.isEmpty()){
+                binding.txtInputUsername.error = "Username are required fields."
+            }
+            if(password.isEmpty()){
+                binding.textInputLayoutPassword.error = "Password are required fields."
+            }
         }
     }
 
     override fun onButtonActionNavClick(v: View) {
         val action = LoginFragmentDirections.actionRegisterFragment()
         Navigation.findNavController(v).navigate(action)
+    }
+
+    override fun onInputClick(v: View) {
+        if(v.tag == "inputUsername"){
+            val builder: AlertDialog.Builder = AlertDialog.Builder(v.context)
+            builder
+                .setMessage("I am the message")
+                .setTitle("I am the title")
+
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+            binding.txtInputUsername.error = null
+            binding.txtInputUsername.isErrorEnabled = false
+        }
+        if(v.tag == "inputPassword"){
+            binding.textInputLayoutPassword.error = null
+            binding.textInputLayoutPassword.isErrorEnabled = false
+        }
     }
 
 }

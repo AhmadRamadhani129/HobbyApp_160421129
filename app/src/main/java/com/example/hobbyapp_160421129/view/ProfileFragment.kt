@@ -21,7 +21,7 @@ import com.example.hobbyapp_160421129.model.Users
 import com.example.hobbyapp_160421129.viewModel.UserViewModel
 import com.squareup.picasso.Picasso
 
-class ProfileFragment : Fragment(), ButtonActionNavClickListener, ButtonClickListener {
+class ProfileFragment : Fragment(), ButtonActionNavClickListener, ButtonClickListener, TextInputClickListener {
     private lateinit var viewModel: UserViewModel
     private lateinit var binding: FragmentProfileBinding
 //    val userAccount = requireActivity().getSharedPreferences("loginAccount", Context.MODE_PRIVATE)
@@ -39,6 +39,7 @@ class ProfileFragment : Fragment(), ButtonActionNavClickListener, ButtonClickLis
         super.onViewCreated(view, savedInstanceState)
         binding.listener = this
         binding.navListener = this
+        binding.inputListener = this
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
@@ -93,20 +94,30 @@ class ProfileFragment : Fragment(), ButtonActionNavClickListener, ButtonClickLis
         val userAccount = requireActivity().getSharedPreferences("loginAccount", Context.MODE_PRIVATE)
         val oldPassword = userAccount.getString("password", "")
         val newPassword = binding.textInputLayoutNewPass.editText?.text.toString()
+        val inputOldPassword = binding.textInputLayoutOldPass.editText?.text.toString()
         val id = userAccount.getString("id", "")
 
-        if(oldPassword == binding.textInputLayoutOldPass.editText?.text.toString()){
+        if (inputOldPassword.isNotEmpty() && newPassword.isNotEmpty()){
+            if(oldPassword == inputOldPassword){
 
-            viewModel.fetchUpdate(binding.textInputLayoutFirstName.editText?.text.toString(), binding.textInputLayoutLastName.editText?.text.toString(), newPassword, id.toString().toInt())
+                viewModel.fetchUpdate(binding.textInputLayoutFirstName.editText?.text.toString(), binding.textInputLayoutLastName.editText?.text.toString(), newPassword, id.toString().toInt())
 //            viewModel.fetchUpdate(id.toString(), binding.textInputLayoutFirstName.editText?.text.toString(), binding.textInputLayoutLastName.editText?.text.toString(), binding.textInputLayoutNewPass.editText?.text.toString())
-            viewModel.userUpdateLD.observe(viewLifecycleOwner, Observer {
-                if(it == true)
-                {
-                    binding.textInputLayoutOldPass.editText?.setText("")
-                    binding.textInputLayoutNewPass.editText?.setText("")
-                    Toast.makeText(requireContext(), "Update Success", Toast.LENGTH_SHORT).show()
-                }
-            })
+                viewModel.userUpdateLD.observe(viewLifecycleOwner, Observer {
+                    if(it == true)
+                    {
+                        binding.textInputLayoutOldPass.editText?.setText("")
+                        binding.textInputLayoutNewPass.editText?.setText("")
+                        Toast.makeText(requireContext(), "Update Success", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+        } else{
+            if(inputOldPassword.isEmpty()){
+                binding.textInputLayoutOldPass.error = "Your current password are required fields."
+            }
+            if(newPassword.isEmpty()){
+                binding.textInputLayoutNewPass.error = "New password are required fields."
+            }
         }
     }
 
@@ -115,5 +126,16 @@ class ProfileFragment : Fragment(), ButtonActionNavClickListener, ButtonClickLis
         userAccount.edit().clear().apply()
         val action = ProfileFragmentDirections.actionProfileLoginFragment()
         Navigation.findNavController(v).navigate(action)
+    }
+
+    override fun onInputClick(v: View) {
+        if(v.tag == "inputOldPass"){
+            binding.textInputLayoutOldPass.error = null
+            binding.textInputLayoutOldPass.isErrorEnabled = false
+        }
+        if(v.tag == "inputNewPass"){
+            binding.textInputLayoutNewPass.error = null
+            binding.textInputLayoutNewPass.isErrorEnabled = false
+        }
     }
 }

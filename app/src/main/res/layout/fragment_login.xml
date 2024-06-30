@@ -13,6 +13,9 @@
         <variable
             name="navListener"
             type="com.example.hobbyapp_160421129.view.ButtonActionNavClickListener" />
+        <variable
+            name="inputListener"
+            type="com.example.hobbyapp_160421129.view.TextInputClickListener" />
     </data>
 
     <FrameLayout
@@ -48,6 +51,7 @@
                     android:layout_marginTop="100dp"
                     android:layout_marginEnd="24dp"
                     android:hint="Username"
+                    app:errorEnabled="true"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -55,8 +59,11 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView2">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/txtUsername"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:onClick="@{inputListener::onInputClick}"
+                        android:tag="inputUsername"
                         android:text="@{user.username}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -65,9 +72,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="32dp"
                     android:layout_marginEnd="24dp"
                     android:hint="Password"
+                    app:errorEnabled="true"
                     app:hintAnimationEnabled="true"
                     app:hintEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -75,8 +83,11 @@
                     app:layout_constraintTop_toBottomOf="@+id/txtInputUsername">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/txtPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:onClick="@{inputListener::onInputClick}"
+                        android:tag="inputPassword"
                         android:text="@{user.password}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -84,11 +95,11 @@
                     android:id="@+id/btnLogin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="44dp"
+                    android:layout_marginTop="40dp"
                     android:layout_marginEnd="36dp"
-                    android:text="Login"
                     android:onClick="@{listener::onButtonClick}"
                     android:tag="@{user.uuid}"
+                    android:text="Login"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textInputLayoutPassword" />
 
