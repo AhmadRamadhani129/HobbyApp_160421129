@@ -147,13 +147,6 @@ class LoginFragment : Fragment(), ButtonClickListener, ButtonActionNavClickListe
 
     override fun onInputClick(v: View) {
         if(v.tag == "inputUsername"){
-            val builder: AlertDialog.Builder = AlertDialog.Builder(v.context)
-            builder
-                .setMessage("I am the message")
-                .setTitle("I am the title")
-
-            val dialog: AlertDialog = builder.create()
-            dialog.show()
             binding.txtInputUsername.error = null
             binding.txtInputUsername.isErrorEnabled = false
         }
