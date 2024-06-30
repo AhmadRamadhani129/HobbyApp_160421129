@@ -63,7 +63,7 @@
                         android:layout_height="wrap_content"
                         android:onClick="@{inputListener::onInputClick}"
                         android:tag="inputFName"
-                        android:text="@{user.first_name}" />
+                        android:text="@={user.first_name}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -86,7 +86,7 @@
                         android:layout_height="wrap_content"
                         android:onClick="@{inputListener::onInputClick}"
                         android:tag="inputLName"
-                        android:text="@{user.last_name}" />
+                        android:text="@={user.last_name}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
